@@ -23,6 +23,8 @@ window.redis = await connect({
 app.use(async (context: Context, next) => {
     context.response.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
     context.response.headers.set("Access-Control-Allow-Origin", "*");
+    context.response.headers.set("Access-Control-Allow-Headers", "*");
+    context.response.headers.set("Access-Control-Allow-Methods", "*");
     await next();
 })
 
