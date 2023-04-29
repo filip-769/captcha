@@ -37,6 +37,7 @@
                 el.classList.add("captcha");
                 if(p.sitekey) el.setAttribute("data-sitekey", p.sitekey);
                 if(p.theme) el.setAttribute("data-theme", p.theme);
+                if(p.size) el.setAttribute("data-size", p.size);
                 if(p["response-field"] === "false") el.setAttribute("data-response-field", p["response-field"]);
                 if(p["response-field-name"]) el.setAttribute("data-response-field-name", p["response-field-name"]);
                 if(p.callback) {
@@ -55,15 +56,6 @@
                         el.setAttribute("data-expired-callback", id)
                     } else {
                         el.setAttribute("data-expired-callback", p["expired-callback"])
-                    }
-                }
-                if(p["timeout-callback"]) {
-                    if(typeof p["timeout-callback"] === "function") {
-                        const id = crypto.randomUUID();
-                        window[id] = p["timeout-callback"];
-                        el.setAttribute("data-timeout-callback", id)
-                    } else {
-                        el.setAttribute("data-timeout-callback", p["timeout-callback"])
                     }
                 }
 

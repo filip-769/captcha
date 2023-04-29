@@ -7,6 +7,7 @@ export default async (context: Context) => {
         "error-codes": string[]
     } = {
         success: false,
+        hostname: "",
         "error-codes": []
     }
 
