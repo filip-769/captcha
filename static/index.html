@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha admin panel</title>
+</head>
+<body>
+    <noscript><h1>Enable JavaScript in your browser.</h1></noscript>
+
+    <main hidden>
+        <h1>Captcha admin panel</h1>
+        <p>
+            Simple UI to generate sitekeys.
+        </p>
+        <label for="password">Server password:</label>
+        <input type="password" id="password" oninput="refreshList()">
+        <h1>Sitekeys:</h1>
+        <ul id="sitekeys"></ul>
+        <button onclick="addSitekey()">Generate new sitekey</button>
+    </main>
+
+    <script>
+        document.querySelector("main").hidden = false;
+
+        const sitekeys = JSON.parse(localStorage.getItem("sitekeys") ?? "[]");
+
+        function addSitekey() {
+            const sitekey = crypto.randomUUID();
+            sitekeys.push(sitekey);
+            localStorage.setItem("sitekeys", JSON.stringify(sitekeys));
+            refreshList();
+        }
+
+        function refreshList() {
+            document.querySelector("#sitekeys").innerHTML = "";
+            sitekeys.forEach(async sitekey => {
+                const el = document.createElement("li");
+                el.textContent = `${sitekey} - ${await sha256(`${document.querySelector("#password").value}/${sitekey}`)}`;
+                document.querySelector("#sitekeys").appendChild(el);
+            })
+        }
+
+        async function sha256(text) {
+            const msgUint8 = new TextEncoder().encode(text);
+            const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("");
+            return hashHex;
+        }
+
+        refreshList();
+    </script>
+    <style>
+        * {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+    </style>
+</body>
+</html>
