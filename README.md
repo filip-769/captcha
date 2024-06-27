@@ -1,6 +1,6 @@
 # Captcha
 
-Simple PoW (proof of work) captcha. It currently uses SHA384, but i am planning to implement some useful algorithm like RandomX for Monero mining.
+Simple PoW (proof of work) captcha. It currently uses SHA384.
 
 ## API
 The API is similar to popular captchas like reCAPTCHA or hCaptcha.
