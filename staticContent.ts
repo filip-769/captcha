@@ -1,4 +1,4 @@
-import { Context } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Context } from "https://deno.land/x/oak@v16.1.0/mod.ts";
 
 export default async (context: Context) => {
     let fileName = context.request.url.pathname.slice(1);

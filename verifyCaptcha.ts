@@ -1,4 +1,5 @@
-import { Context } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Context } from "https://deno.land/x/oak@v16.1.0/mod.ts";
+import "https://deno.land/x/dotenv@v3.2.2/load.ts";
 
 export default async (context: Context) => {
     const responseBody: {
@@ -15,11 +16,10 @@ export default async (context: Context) => {
         let requestBody: any = {};
         try {
             if(context.request.method === "POST") {
-                const body = context.request.body();
-                if(body.type === "json") {
-                    requestBody = await body.value;
-                } else if (body.type === "form") {
-                    requestBody = Object.fromEntries(await body.value);
+                if(context.request.body.type() === "json") {
+                    requestBody = await context.request.body.json();
+                } else if (context.request.body.type() === "form") {
+                    requestBody = Object.fromEntries(await context.request.body.form());
                 } else {
                     responseBody["error-codes"].push("bad-request");
                     return;
@@ -43,20 +43,21 @@ export default async (context: Context) => {
 
         const [ id, number ] = response.split("/");
 
-        if(!(await window.redis.exists(id))) return responseBody["error-codes"].push("invalid-input-response");
+        const captcha = (globalThis as any).captchas[id];
 
-        const data = await window.redis.sendCommand("JSON.GET", id);
-        const json = JSON.parse(data.string());
-    
-        await window.redis.del(id);
+        if(!captcha || captcha.expires < Date.now()) return responseBody["error-codes"].push("invalid-input-response");
 
-        if(await hash(`${Deno.env.get("SERVER_TOKEN")}/${json.sitekey}`, "SHA-256") !== secret) return responseBody["error-codes"].push("invalid-input-secret");
+        (globalThis as any).captchas[id] = undefined;
 
-        responseBody.hostname = json.hostname;
-        responseBody.success = +number === json.number;
+        if(await hash(`${Deno.env.get("SERVER_TOKEN")}/${captcha.sitekey}`, "SHA-256") !== secret) {
+            return responseBody["error-codes"].push("invalid-input-secret");
+        }
 
-        if(sitekey && (sitekey !== json.sitekey)) responseBody.success = false;
-        if(remoteip && (remoteip !== json.ip)) responseBody.success = false;
+        responseBody.hostname = captcha.hostname;
+        responseBody.success = +number === captcha.number;
+
+        if(sitekey && (sitekey !== captcha.sitekey)) responseBody.success = false;
+        if(remoteip && (remoteip !== captcha.ip)) responseBody.success = false;
     } catch (error) {
         console.error(error);
         responseBody["error-codes"].push("internal-error");

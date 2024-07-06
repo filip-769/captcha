@@ -27,7 +27,7 @@
 }
 
 .captcha[data-sitekey].verified:not(:empty)::before {
-    animation: captcha_scale 0.2s ease;
+    animation: captcha_scale 0.25s ease;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb24tdGFibGVyLWNpcmNsZS1jaGVjayIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHN0cm9rZS13aWR0aD0iMS4yNSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggc3Ryb2tlPSJub25lIiBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIj48L3BhdGg+PHBhdGggZD0iTTEyIDEybS05IDBhOSA5IDAgMSAwIDE4IDBhOSA5IDAgMSAwIC0xOCAwIj48L3BhdGg+PHBhdGggZD0iTTkgMTJsMiAybDQgLTQiPjwvcGF0aD48L3N2Zz4=");
 }
 
@@ -62,7 +62,7 @@
       transform: scale(1);
     }
     50%{
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
     100%{
       transform: scale(1);

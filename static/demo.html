@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./api.js"></script>
+    <title>Captcha demo</title>
+</head>
+<body>
+    <noscript><h1>Enable JavaScript in your browser.</h1></noscript>
+
+    <div class="captcha" data-sitekey="41d271b6-0bab-49b1-8788-ef0ef46fcaf0"></div>
+
+    <br>
+
+    <button onclick="verifyResponse()">Verify response</button>
+
+    <script>
+        async function verifyResponse() {
+            const response = await fetch("/verifyCaptcha", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    secret: prompt("Enter your secret key"),
+                    response: captcha.getResponse()
+                })
+            });
+            const json = await response.json();
+
+            alert(JSON.stringify(json, null, 4))
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+    </style>
+</body>
+</html>

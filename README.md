@@ -16,7 +16,7 @@ You can also specify url parameters on the js file.
 #### Captcha parameters
 | Name  | Required | Default | Type | Description |
 |----------|----------|----------|----------|----------|
-| sitekey | yes | - | UUID | Your sitekey. |
+| sitekey | yes | - | UUIDv4 | Your sitekey. |
 | theme | no | light | `light` / `dark` | The theme of the captcha. |
 | size | no | normal | `normal` / `compact` / `invisible` | Type of the captcha. |
 | response-field | no | true | boolean | If a hidden input should be added to the form. |
@@ -56,17 +56,13 @@ Send a `POST` request containing a `application/json` encoded body to `/verifyCa
 ## Setup
 
 ### Requirements
-- Redis + RedisJSON
 - Deno
 
 ### Installation locally
-Install Redis with RedisJSON and Deno, then clone this repo set the enviroment variables in `.env` file and run `deno run --allow-read --allow-env --allow-net app.ts`.
+Install Deno, then clone this repo set the enviroment variable in `.env` file and run `deno run --allow-read --allow-env --allow-net app.ts`.
 
-### Installation in cloud (Deno Deploy, Redis Cloud)
-You can use this project for free using free tier of Redis Cloud (https://redis.com/try-free/) and free tier of Deno Deploy (https://dash.deno.com/).
+### Installation in cloud (Deno Deploy)
+You can use this project for free using the free tier of Deno Deploy (https://dash.deno.com/).
 
 ### Enviroment variables
-- REDIS_PASSWORD, REDIS_USERNAME, REDIS_PORT, REDIS_HOSTNAME - your Redis database information
 - SERVER_TOKEN a password you will use to generate secrets from sitekeys
-- SERVER_PORT a port number the server will listen on
-- CAPTCHA_DIFFICULTY the difficulty of the captchas (3 000 000 is minimum recommended value)

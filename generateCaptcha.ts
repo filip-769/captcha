@@ -1,8 +1,8 @@
 import { sha384 } from "https://cdn.jsdelivr.net/npm/hash-wasm@4/+esm";
-import { Context } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Context } from "https://deno.land/x/oak@v16.1.0/mod.ts";
 
 export default async (context: Context) => {
-    const body = await context.request.body({ type: "json" }).value;
+    const body = await context.request.body.json();
     const { sitekey, hostname } = body;
 
     if(
@@ -19,16 +19,17 @@ export default async (context: Context) => {
     const salt = crypto.randomUUID();
     const id = crypto.randomUUID();
     const ip = context.request.ip;
-    const difficulty = parseInt(Deno.env.get("CAPTCHA_DIFFICULTY") ?? "2000000");
+
+    const difficulty = 5000000;
     const number = Math.round(crypto.getRandomValues(new Uint32Array(1))[0]/2**32*difficulty);
 
-    await window.redis.sendCommand("JSON.SET", id, "$", JSON.stringify({
+    (globalThis as any).captchas[id] = {
         number,
         sitekey,
         hostname,
-        ip
-    }));
-    await window.redis.expire(id, 300);
+        ip,
+        expires: Date.now() + 300000
+    }
 
     context.response.status = 201;
     context.response.body = {
