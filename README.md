@@ -65,4 +65,4 @@ Install Deno, then clone this repo set the enviroment variable in `.env` file an
 You can use this project for free using the free tier of Deno Deploy (https://dash.deno.com/).
 
 ### Enviroment variables
-- SERVER_TOKEN a password you will use to generate secrets from sitekeys
+- `SERVER_TOKEN`: a password you will use to generate secrets from sitekeys
